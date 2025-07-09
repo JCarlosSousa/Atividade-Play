@@ -1,0 +1,85 @@
+/* Este trecho é essencial para garantir que a tela fique 100% preta e sem scroll */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #0e0e0e;
+  font-family: sans-serif;
+  overflow: hidden; /* impede scroll */
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.playerContainer {
+  background-color: #1d1f2f;
+  border-radius: 30px;
+  padding: 20px;
+  width: 300px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.albumCover {
+  width: 100%;
+  border-radius: 12px;
+}
+
+.songInfo {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.songTitle {
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.artist {
+  color: #a0aec0;
+  font-size: 14px;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.time {
+  color: #a0aec0;
+  font-size: 12px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  gap: 20px;
+}
+
+.buttons button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.playButton {
+  background-color: #e53935;
+  border-radius: 50%;
+  padding: 12px;
+  color: white;
+  font-size: 18px;
+}
+
+.volumeIcon {
+  font-size: 18px;
+}
