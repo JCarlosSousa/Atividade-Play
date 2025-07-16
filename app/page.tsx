@@ -4,19 +4,19 @@ import styles from '@/app/Home.module.css';
 import { useRef, useState } from 'react';
 
 export default function Home() {
-  const audioRef = useRef<HTMLAudioElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
   const togglePlay = () => {
-    const audio = audioRef.current;
-    if (!audio) return;
+    const video = videoRef.current;
+    if (!video) return;
 
     if (isPlaying) {
-      audio.pause();
+      video.pause();
     } else {
-      audio.play();
+      video.play();
     }
     setIsPlaying(!isPlaying);
   };
@@ -28,26 +28,34 @@ export default function Home() {
   };
 
   const handleLoadedMetadata = () => {
-    const audio = audioRef.current;
-    if (audio) {
-      setDuration(audio.duration);
+    const video = videoRef.current;
+    if (video) {
+      setDuration(video.duration);
     }
   };
 
   const handleTimeUpdate = () => {
-    const audio = audioRef.current;
-    if (audio) {
-      setCurrentTime(audio.currentTime);
+    const video = videoRef.current;
+    if (video) {
+      setCurrentTime(video.currentTime);
     }
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.playerContainer}>
-        <img src="/alok-favela.jpg" alt="Ina Wroldsen, Alok - Favela" className={styles.albumCover} />
+        <video
+          ref={videoRef}
+          src="/Alok & Ina Wroldsen - Favela (Official Music Video).mp4"
+          className={styles.videoPlayer}
+          onLoadedMetadata={handleLoadedMetadata}
+          onTimeUpdate={handleTimeUpdate}
+          style={{ width: '100%', maxWidth: '800px', height: 'auto' }}
+          controls={false}
+        />
         <div className={styles.songInfo}>
-          <div className={styles.songTitle}>Ina Wroldsen, Alok - Favela</div>
-          <div className={styles.artist}>Youtube</div>
+          <div className={styles.songTitle}>Alok & Ina Wroldsen - Favela (Official Music Video)</div>
+          <div className={styles.artist}>Fonte: YouTube</div>
         </div>
         <div className={styles.controls}>
           <div className={styles.time}>{formatTime(currentTime)}</div>
@@ -60,13 +68,8 @@ export default function Home() {
           </button>
           <button className={styles.volumeIcon}>&#128266;</button>
         </div>
-        <audio
-          ref={audioRef}
-          src="/Ina Wroldsen, Alok - Favela (Lyric Video).mp3"
-          onLoadedMetadata={handleLoadedMetadata}
-          onTimeUpdate={handleTimeUpdate}
-        />
       </div>
     </div>
   );
 }
+
