@@ -183,4 +183,23 @@ html, body {
   border: 2px solid #fff;
 }
 
+.videoList {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.videoItem {
+  cursor: pointer;
+  padding: 8px 12px;
+  background-color: #2a2d3a;
+  border-radius: 8px;
+  color: white;
+  transition: background 0.2s;
+}
+
+.videoItem:hover {
+  background-color: #3a3d4a;
+}
 

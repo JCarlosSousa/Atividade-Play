@@ -1,7 +1,7 @@
 'use client';
 
 import styles from '@/app/Home.module.css';
-import { useRef, useState } from 'react';
+import { SetStateAction, useRef, useState } from 'react';
 import { useEffect } from 'react';
 
 export default function Home() {
@@ -15,6 +15,7 @@ export default function Home() {
   const [seekValue, setSeekValue] = useState(0);
   const startSeek = () => setIsSeeking(true);
   const endSeek = () => setIsSeeking(false);
+  const [shouldAutoPlay, setShouldAutoPlay] = useState(false);
 
 
   useEffect(() => {
@@ -40,7 +41,7 @@ export default function Home() {
       video.removeEventListener('loadedmetadata', handleMetadata);
     };
   }, []);
-  
+
   const togglePlay = () => {
     const video = videoRef.current;
     if (!video) return;
@@ -63,16 +64,15 @@ export default function Home() {
 
   const handleLoadedMetadata = () => {
     const video = videoRef.current;
-    if (video) {
-      const checkDuration = () => {
-        if (!isNaN(video.duration) && video.duration > 0) {
-          setDuration(video.duration);
-        } else {
-          // Retry em 200ms até ter uma duração válida
-          setTimeout(checkDuration, 200);
-        }
-      };
-      checkDuration();
+    if (video && !isNaN(video.duration)) {
+      setDuration(video.duration);
+      setSeekValue(video.currentTime);
+
+      if (shouldAutoPlay) {
+        video.play();
+        setIsPlaying(true);
+        setShouldAutoPlay(false); // reset
+      }
     }
   };
 
@@ -130,13 +130,44 @@ export default function Home() {
     }
   };
 
+  const videoList = [
+    {
+      title: "Alok & Ina Wroldsen - Favela",
+      artist: "Fonte: YouTube",
+      src: "/Alok & Ina Wroldsen - Favela (Official Music Video).mp4",
+    },
+    {
+      title: "Video de Gatinho",
+      artist: "Fonte: YouTube",
+      src: "/Gato.mp4",
+    },
+    {
+      title: "Propaganda Trident",
+      artist: "Fonte: YouTube",
+      src: "/Trident.mp4",
+    },
+  ];
+
+  const [currentVideo, setCurrentVideo] = useState(videoList[0]);
+  
+  const selectVideo = (video: SetStateAction<{ title: string; artist: string; src: string; }>) => {
+    setCurrentVideo(video);
+    setIsPlaying(false);
+    setCurrentTime(0);
+    setSeekValue(0);
+    setShouldAutoPlay(true); // sinaliza para tocar após carregar
+  };
+
+  
+
   return (
     <div className={styles.container}>
       <div className={styles.playerContainer}>
         <video
           ref={videoRef}
-          src="/Alok & Ina Wroldsen - Favela (Official Music Video).mp4"
-          preload="metadada"
+          src={currentVideo.src}
+          key={currentVideo.src} // força rerender
+          preload="metadata"
           className={styles.videoPlayer}
           onLoadedMetadata={handleLoadedMetadata}
           onTimeUpdate={handleTimeUpdate}
@@ -145,10 +176,21 @@ export default function Home() {
         />
 
         <div className={styles.songInfo}>
-          <div className={styles.songTitle}>Alok & Ina Wroldsen - Favela (Official Music Video)</div>
-          <div className={styles.artist}>Fonte: YouTube</div>
+          <div className={styles.songTitle}>{currentVideo.title}</div>
+          <div className={styles.artist}>{currentVideo.artist}</div>
         </div>
 
+        <div className={styles.videoList}>
+          {videoList.map((video, index) => (
+            <div
+              key={index}
+              className={styles.videoItem}
+              onClick={() => selectVideo(video)}
+            >
+              ▶ {video.title}
+            </div>
+          ))}
+        </div>
         
         <div className={styles.controls}>
           <div className={styles.timeLabel}>
