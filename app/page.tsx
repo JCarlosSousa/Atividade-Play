@@ -2,6 +2,7 @@
 
 import styles from '@/app/Home.module.css';
 import { useRef, useState } from 'react';
+import { useEffect } from 'react';
 
 export default function Home() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -16,6 +17,30 @@ export default function Home() {
   const endSeek = () => setIsSeeking(false);
 
 
+  useEffect(() => {
+    const video = videoRef.current;
+
+    if (!video) return;
+
+    const handleMetadata = () => {
+      if (!isNaN(video.duration)) {
+        setDuration(video.duration);
+        setSeekValue(video.currentTime);
+      }
+    };
+
+    // Caso já esteja carregado (ex: após F5), capturamos manualmente
+    if (video.readyState >= 1) {
+      handleMetadata();
+    } else {
+      video.addEventListener('loadedmetadata', handleMetadata);
+    }
+
+    return () => {
+      video.removeEventListener('loadedmetadata', handleMetadata);
+    };
+  }, []);
+  
   const togglePlay = () => {
     const video = videoRef.current;
     if (!video) return;
