@@ -102,6 +102,14 @@ export default function Home() {
     }
   };
 
+  const handleVideoEnded = () => {
+    const currentIndex = videoList.findIndex(v => v.src === currentVideo.src);
+    const nextIndex = (currentIndex + 1) % videoList.length; // volta ao primeiro se estiver no último
+    const nextVideo = videoList[nextIndex];
+    selectVideo(nextVideo); // reutiliza função que troca o vídeo
+  };
+
+
 
   const changeVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseFloat(e.target.value);
@@ -166,11 +174,12 @@ export default function Home() {
         <video
           ref={videoRef}
           src={currentVideo.src}
-          key={currentVideo.src} // força rerender
+          key={currentVideo.src}
           preload="metadata"
           className={styles.videoPlayer}
           onLoadedMetadata={handleLoadedMetadata}
           onTimeUpdate={handleTimeUpdate}
+          onEnded={handleVideoEnded} // novo evento aqui!
           style={{ width: '100%', maxWidth: '800px', height: 'auto' }}
           controls={false}
         />
