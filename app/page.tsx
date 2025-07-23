@@ -132,9 +132,9 @@ export default function Home() {
 
   const videoList = [
     {
-      title: "Alok & Ina Wroldsen - Favela",
+      title: "Cachorro Dançando no Espaço",
       artist: "Fonte: YouTube",
-      src: "/Alok & Ina Wroldsen - Favela (Official Music Video).mp4",
+      src: "/Cachorro.mp4",
     },
     {
       title: "Video de Gatinho",
